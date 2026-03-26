@@ -1,0 +1,24 @@
+name: Check Pull Request
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  check-branch:
+    runs-on: ubuntu-latest
+    env:
+      ENV_TYPE: PRODUCTION
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check if hotfix branch
+        if: startsWith(github.head_ref, 'hotfix/')
+        run: |
+          echo "URGENCE DETECTÉE"
+          echo "Type d'environnement : ${{ env.ENV_TYPE }}"
+
+      - name: Display Env Variable
+        if: "!startsWith(github.head_ref, 'hotfix/')"
+        run: echo "Environnement standard : ${{ env.ENV_TYPE }}"
